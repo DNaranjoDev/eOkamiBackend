@@ -1,7 +1,5 @@
 package dev.dnaranjo.eOkami.models;
 
-import java.io.Serial;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,7 +15,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter @Setter @Column(name="id")
-    private Serial id;
+    private Long id;
 
     // Name
     @Getter @Setter @Column(name="name")
