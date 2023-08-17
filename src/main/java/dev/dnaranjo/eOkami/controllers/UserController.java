@@ -1,38 +1,31 @@
 package dev.dnaranjo.eOkami.controllers;
-
-import dev.dnaranjo.eOkami.dao.UserDao;
 import dev.dnaranjo.eOkami.models.User;
-import dev.dnaranjo.eOkami.utils.JWTUtil;
+import dev.dnaranjo.eOkami.repository.UserRepository;
+import dev.dnaranjo.eOkami.service.UserService;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 public class UserController {
-
     @Autowired
-    private UserDao userDao;
+    private UserRepository userRepo;
     @Autowired
-    private JWTUtil jwtUtil;
+    private UserService userService;
 
-    private boolean validateToken(String token) {
-        String userId = jwtUtil.getKey(token);
-        return userId != null;
+    @GetMapping("api/users")
+    public ResponseEntity<List<User>> getAllUsers() {
+        return new ResponseEntity<List<User>>(userService.allUsers(), HttpStatus.OK);
     }
-
-    // @RequestMapping(value="api/users", method = RequestMethod.GET)
-    // public List<User> getAllUsers(@RequestHeader(value ="Authorization") String token) {
-    //     if(!validateToken(token)) { return null; }
-    //     return userDao.getAllUsers();
-    // }
-    @RequestMapping(value="api/users")
-    public List<User> getAllUsers() {
-
-        return userDao.getAllUsers();
+    @PostMapping("api/addUser")
+    public void addUser(@RequestBody User user) {
+        userRepo.save(user);
     }
 }
